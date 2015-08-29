@@ -47,7 +47,6 @@ module Twofactor
       template 'templates/twofactor_migration.rb', File.join('db', 'migrate', "#{Time.now.strftime('%Y%m%d%H%M%S')}_add_twofactor_fields_to_#{table_name}.rb")
       template_location = controller_name == 'ApplicationController' ? 'twofactor' : controller_name.gsub('Controller','').tableize
       copy_file "templates/twofactor_register.html.#{options[:template_type]}", "app/views/#{template_location}/twofactor_register.html.#{options[:template_type]}"
-      inject_into_file "app/controllers/#{controller_name.underscore}.rb", "require 'rqrcode'\n", :before => "class #{controller_name}"
       twofactor_actions = "\n  public\n"\
         "    def twofactor_register\n"\
         "      model_object = #{@model_name.constantize}.find_by_id(params[:id])\n"\
