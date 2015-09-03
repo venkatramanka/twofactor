@@ -5,7 +5,7 @@ module Twofactor
     #First arg : Model Name which needs Two-factor auth
     #Second arg : Reference field that needs to be used(This field will appear in the client's Google Authenticator app. Defaults to 'email')
     #Third arg : Template type to use for twofactor_register default page (takes one of erb / haml / slim)
-    #Fourth arg : Controller that could be configured with TwoFactor actions( Defaults to 'ApplicationController' )
+    #Fourth arg : Controller that could be configured with TwoFactor actions( Defaults to Controller with modelname pluralized )
     #Fifth arg : Table name corresponding to the model. ( Defaults to Rails' choice. )
     def initialize(*runtime_args)
       super(*runtime_args)
@@ -41,7 +41,7 @@ module Twofactor
 
       raise InvalidTemplateTypeError unless ['haml','erb','slim'].include? options[:template_type]
 
-      controller_name = options[:controller].present? ? options[:controller] : 'ApplicationController'
+      controller_name = options[:controller].present? ? options[:controller] : "#{@model_name.pluralize}Controller"
       table_name = options[:table_name].present? ? options[:table_name] : @model_name.tableize
 
       template 'templates/twofactor_config.rb', 'config/initializers/twofactor_config.rb'
