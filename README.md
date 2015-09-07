@@ -25,6 +25,30 @@ rails generate twofactor:install <Model> <ReferenceField> <TemplateType> <Contro
 rake db:migrate
 ```
 
+* To validate a 2-Factor code on user login, call :
+```ruby
+Twofactor::TwoStep.valid_code? <ModelObject>, <Code>
+```
+
+For instance, if you have a `@user` object who's trying to login, get a 2-Factor code from him if he passes your site's usual login and call the following to validate his 2-Factor :
+```ruby
+Twofactor::TwoStep.valid_code? @user, 237654
+```
+The method returns `true` if the code's valid .
+
+If you wish to create your own endpoint & views, use the below two methods to enable & disable `Twofactor` for an object :
+
+```ruby
+Twofactor::TwoStep.enable_twofactor_auth <ModelObject>
+```
+
+```ruby
+Twofactor::TwoStep.disable_twofactor_auth <ModelObject>
+```
+
+Other `Twofactor` configurations can be customized in `twofactor_config.rb` under `config/initializers` that you'll get on `twofactor:install`
+
+
 ##Install Generator arguments
 
 Twofactor's install generator accepts five arguments of which the first 3 are mandatory:
